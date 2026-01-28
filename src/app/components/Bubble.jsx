@@ -46,7 +46,6 @@ const BubbleGame = () => {
   const gameOverAudioRef = useRef(null);
   const winAudioRef = useRef(null);
   const startSoundRef = useRef(null);
-  // ✅ FIXED: Added missing returnSoundRef
   const returnSoundRef = useRef(null); 
   const tickAudioRef = useRef(null);
 
@@ -180,10 +179,10 @@ const BubbleGame = () => {
   };
 
   const shareScore = () => {
-    const text = `🧠 I scored ${score} on Memory Bubbles! High Score: ${highScore}. Can you beat me?`;
+    const text = `🧠 I scored ${score} on BrainBuffer! High Score: ${highScore}. Can you beat me?`;
     if (navigator.share) {
       navigator.share({
-        title: 'Memory Bubbles',
+        title: 'BrainBuffer',
         text: text,
         url: window.location.href,
       }).catch(console.error);
@@ -361,13 +360,15 @@ const BubbleGame = () => {
 
       {/* --- HUD --- */}
       <div className={styles.header}>
-        <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
-            <div className={styles.statBadge}>
+        {/* Adjusted for Mobile: Smaller Gap, No Wrapping, Shortened Label */}
+        <div style={{display: 'flex', gap: '6px', alignItems: 'center'}}>
+            <div className={styles.statBadge} style={{whiteSpace: 'nowrap'}}>
                 <span className={styles.currencyIcon}>🏆</span> {highScore}
             </div>
             {gameState !== 'idle' && (
-               <div className={styles.statBadge} style={{color: '#3b82f6'}}>
-                  <span>Score:</span> {score}
+               <div className={styles.statBadge} style={{color: '#3b82f6', whiteSpace: 'nowrap'}}>
+                  {/* Changed "Score:" to "Sc:" to fix mobile overlap */}
+                  <span style={{opacity: 0.7, marginRight: '4px'}}>Score:</span>{score}
                </div>
             )}
         </div>
@@ -469,7 +470,11 @@ const BubbleGame = () => {
       {/* --- SCREENS --- */}
       {gameState === 'idle' && !showTutorial && (
         <div className={styles.startScreen}>
-          <h1>BrainBuffer</h1>
+          {/* ✅ Branded Logo Style */}
+          <h1 style={{ letterSpacing: '-1px' }}>
+             <span style={{ color: '#1e293b' }}>Brain</span>
+             <span style={{ color: '#3b82f6' }}>Buffer</span>
+          </h1>
           <div className={styles.statBadge} style={{marginBottom:'20px'}}>🏆 High Score: {highScore}</div>
           <button onClick={() => { startSoundRef.current?.play(); startGame(); }}>
             Start Game
@@ -486,7 +491,7 @@ const BubbleGame = () => {
             Try Again
           </button>
           
-          <button className={styles.secondaryBtn} style={{marginTop: '10px'}} onClick={shareScore}>
+          <button className={styles.secondaryBtn} style={{marginTop: '10px', width: 'auto', padding: '12px 30px'}} onClick={shareScore}>
              Share Score 📤
           </button>
           
